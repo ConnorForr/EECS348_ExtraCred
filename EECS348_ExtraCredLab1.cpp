@@ -1,8 +1,11 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <vector>
+#include <algorithm>
 #include<fstream>
+
 using namespace std;
 
-pair<int, int> decision_func(int programmer, int (&departments)[][5], int (&programmers)[][5], vector<int> &open_departments) {
+pair<int, int> decision_func(const int programmer, int (&departments)[5][5], const int (&programmers)[5][5], vector<int> &open_departments) {
     
     pair<int, int> decision;
     vector<int> possibilites;
@@ -20,6 +23,7 @@ pair<int, int> decision_func(int programmer, int (&departments)[][5], int (&prog
             break;
         }
     }
+    
     cout << "possibilites ";
     for(auto &x : possibilites) {
         cout << x << " ";
@@ -34,21 +38,26 @@ pair<int, int> decision_func(int programmer, int (&departments)[][5], int (&prog
                 open_departments.erase(remove(open_departments.begin(), open_departments.end(), decision.first), open_departments.end());
                 cout << decision.first << " " << decision.second << endl;
                 
-                int index_to_remove;
+                
                 for(auto &possibility : possibilites) {
+                    int index_to_remove;
+
                     if( possibility != decision.first) {
-                        index_to_remove = distance(departments[possibility-1], find(departments[possibility-1], departments[possibility-1] + 5, programmer));
+                        int x = 0;
+                        while (x < 5) {
+                            if (departments[possibility-1][x] == programmer) {
+                                index_to_remove = x;
+                                break;
+                            }
+                            i++;    
+                        }
+                        //index_to_remove = distance(departments[possibility-1] find(departments[possibility-1], departments[possibility-1] + 5, programmer));
                         cout << index_to_remove << endl;
                     }
 
-                    for(int i = index_to_remove; i < 4; ++i) {
-                        departments[possibility-1][i] = departments[possibility-1][i+1];
-                        
+                    for(int j = index_to_remove; j < 4; ++j) {
+                        departments[possibility-1][j] = departments[possibility-1][j+1]; 
                     } 
-                    for(auto &x : departments[possibility-1]) {
-                            cout << x << " ";
-                        }
-                        cout << endl;
                 }
 
                 return decision;
@@ -64,7 +73,7 @@ pair<int, int> decision_func(int programmer, int (&departments)[][5], int (&prog
     return decision;
 }
 
-pair<int, int>* department_selection(int (&departments)[][5], int (&programmers)[][5]) {
+pair<int, int>* department_selection(int (&departments)[5][5],const int (&programmers)[5][5]) {
 
         static pair<int, int> selections[5];
         vector<int> open_departments {1, 2, 3, 4, 5};
