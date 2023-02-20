@@ -19,16 +19,9 @@ pair<int, int> decision_func(const int programmer, int (&departments)[5][5], con
             }
         }
         if(!possibilites.empty()) {
-            cout << "break hit" << endl;
             break;
         }
     }
-    
-    cout << "possibilites ";
-    for(auto &x : possibilites) {
-        cout << x << " ";
-    }
-    cout << endl;
 
     if(possibilites.size() > 1) {
         for(int i = 0; i < 5; ++i) {
@@ -36,30 +29,18 @@ pair<int, int> decision_func(const int programmer, int (&departments)[5][5], con
                 decision.first = programmers[programmer-1][i];
                 decision.second = programmer;
                 open_departments.erase(remove(open_departments.begin(), open_departments.end(), decision.first), open_departments.end());
-                cout << decision.first << " " << decision.second << endl;
-                
                 
                 for(auto &possibility : possibilites) {
-                    int index_to_remove;
+                    int index_to_remove = 0;
 
                     if( possibility != decision.first) {
-                        int x = 0;
-                        while (x < 5) {
-                            if (departments[possibility-1][x] == programmer) {
-                                index_to_remove = x;
-                                break;
-                            }
-                            i++;    
-                        }
-                        //index_to_remove = distance(departments[possibility-1] find(departments[possibility-1], departments[possibility-1] + 5, programmer));
-                        cout << index_to_remove << endl;
+                        index_to_remove = distance(departments[possibility-1], find(departments[possibility-1], departments[possibility-1] + 5, programmer));
                     }
 
                     for(int j = index_to_remove; j < 4; ++j) {
                         departments[possibility-1][j] = departments[possibility-1][j+1]; 
                     } 
                 }
-
                 return decision;
             }
         }
@@ -69,7 +50,6 @@ pair<int, int> decision_func(const int programmer, int (&departments)[5][5], con
         open_departments.erase(remove(open_departments.begin(), open_departments.end(), decision.first), open_departments.end());
         return decision;
     }
-
     return decision;
 }
 
@@ -79,37 +59,9 @@ pair<int, int>* department_selection(int (&departments)[5][5],const int (&progra
         vector<int> open_departments {1, 2, 3, 4, 5};
         
         selections[0] = decision_func(1, departments, programmers, open_departments);
-
-        cout << "open_deps ";
-        for(auto &x : open_departments) {
-            cout << x << " ";
-        }
-        cout << endl;
-
         selections[1] = decision_func(2, departments, programmers, open_departments);
-
-        cout << "open_deps ";
-        for(auto &x : open_departments) {
-            cout << x << " ";
-        }
-        cout << endl;
-
         selections[2] = decision_func(3, departments, programmers, open_departments);
-
-        cout << "open_deps ";
-        for(auto &x : open_departments) {
-            cout << x << " ";
-        }
-        cout << endl;
-
         selections[3] = decision_func(4, departments, programmers, open_departments);
-
-        cout << "open_deps ";
-        for(auto &x : open_departments) {
-            cout << x << " ";
-        }
-        cout << endl;
-
         selections[4] = decision_func(5, departments, programmers, open_departments);
         
         return selections;
@@ -138,8 +90,11 @@ int main() {
 
     pair<int, int> * arr = department_selection(departments, programmers);
     
+    cout << "\n";
     for(int i = 0; i < 5; ++i) {
         cout << "Department #" << arr[i].first << " " << "will get Programmer #" << arr[i].second << endl;
     }
+    cout << "\n";
+    
     return 0;
 }
