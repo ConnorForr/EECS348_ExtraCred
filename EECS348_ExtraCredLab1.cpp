@@ -53,19 +53,23 @@ pair<int, int> decision_func(const int programmer, int (&departments)[5][5], con
     return decision;
 }
 
-pair<int, int>* department_selection(int (&departments)[5][5],const int (&programmers)[5][5]) {
+vector<pair<int, int>> department_selection(int (&departments)[5][5],const int (&programmers)[5][5]) {
 
-        static pair<int, int> selections[5];
+        static vector<pair<int, int>> selections;
         vector<int> open_departments {1, 2, 3, 4, 5};
         
-        selections[0] = decision_func(1, departments, programmers, open_departments);
-        selections[1] = decision_func(2, departments, programmers, open_departments);
-        selections[2] = decision_func(3, departments, programmers, open_departments);
-        selections[3] = decision_func(4, departments, programmers, open_departments);
-        selections[4] = decision_func(5, departments, programmers, open_departments);
+        selections.push_back(decision_func(1, departments, programmers, open_departments));
+        selections.push_back(decision_func(2, departments, programmers, open_departments));
+        selections.push_back(decision_func(3, departments, programmers, open_departments));
+        selections.push_back(decision_func(4, departments, programmers, open_departments));
+        selections.push_back(decision_func(5, departments, programmers, open_departments));
         
         return selections;
     }
+
+bool comp_func(const pair<int, int> &p1, const pair<int, int> &p2) {
+    return p1.first < p2.first;
+}
 
 int main() {
     
@@ -88,13 +92,14 @@ int main() {
         input_file.close();
     }
 
-    pair<int, int> * arr = department_selection(departments, programmers);
+    vector<pair<int, int>> solution = department_selection(departments, programmers);
     
+    sort(solution.begin(), solution.end(), comp_func);
     cout << "\n";
     for(int i = 0; i < 5; ++i) {
-        cout << "Department #" << arr[i].first << " " << "will get Programmer #" << arr[i].second << endl;
+        cout << "Department #" << solution[i].first << " " << "will get Programmer #" << solution[i].second << endl;
     }
     cout << "\n";
-    
+
     return 0;
 }
