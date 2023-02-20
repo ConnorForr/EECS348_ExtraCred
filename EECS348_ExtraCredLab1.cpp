@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
-#include<fstream>
+#include <fstream>
 
 using namespace std;
 
@@ -31,15 +31,15 @@ pair<int, int> decision_func(const int programmer, int (&departments)[5][5], con
                 open_departments.erase(remove(open_departments.begin(), open_departments.end(), decision.first), open_departments.end());
                 
                 for(auto &possibility : possibilites) {
-                    int index_to_remove = 0;
+                    int index_to_remove;
 
                     if( possibility != decision.first) {
                         index_to_remove = distance(departments[possibility-1], find(departments[possibility-1], departments[possibility-1] + 5, programmer));
-                    }
 
-                    for(int j = index_to_remove; j < 4; ++j) {
+                        for(int j = index_to_remove; j < 4; ++j) {
                         departments[possibility-1][j] = departments[possibility-1][j+1]; 
-                    } 
+                        } 
+                    }  
                 }
                 return decision;
             }
@@ -93,8 +93,8 @@ int main() {
     }
 
     vector<pair<int, int>> solution = department_selection(departments, programmers);
-    
     sort(solution.begin(), solution.end(), comp_func);
+     
     cout << "\n";
     for(int i = 0; i < 5; ++i) {
         cout << "Department #" << solution[i].first << " " << "will get Programmer #" << solution[i].second << endl;
